@@ -25,4 +25,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Build
-        path: /home/runner/work/DHCPCD9/SuperGigachadGame/release/
+        path: release
