@@ -68,6 +68,7 @@ public class GameClient
     private void Events_Disconnected(object? sender, DisconnectionEventArgs e)
     {
         Console.WriteLine("Disconnected: " + e.Reason);
+        _game.IsReady = false;
     }
 
     private void Events_DataReceived(object? sender, MessageReceivedEventArgs e)

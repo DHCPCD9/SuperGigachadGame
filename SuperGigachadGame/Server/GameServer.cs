@@ -58,6 +58,8 @@ public class GameServer
         disconnectPacketWriter.Write(client.ID);
 
         Broadcast(disconnectPacketStream.ToArray());
+        
+        Console.WriteLine($"Client {e.IpPort} disconnected");
     }
 
     public void Broadcast(byte[] toArray)
