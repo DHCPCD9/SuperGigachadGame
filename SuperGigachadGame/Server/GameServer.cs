@@ -35,7 +35,7 @@ public class GameServer
 
     public void Start()
     {
-        Listener = new WatsonTcpServer("0.0.0.0", 7777);
+        Listener = new WatsonTcpServer("0.0.0.0", Port);
         Listener.Events.ClientConnected += Events_ClientConnected;
         Listener.Events.StreamReceived += Events_StreamReceived;
         Listener.Events.ClientDisconnected += Events_ClientDisconnected;
