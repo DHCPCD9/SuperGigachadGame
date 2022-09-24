@@ -23,7 +23,7 @@ else
 {
     var server = new GameServer("0.0.0.0", port, false);
     server.Start();
-    Console.WriteLine("Started...");
+    Console.WriteLine("Started... Port: " + port);
     while (true)
     {
         server.Update();
