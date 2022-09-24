@@ -264,7 +264,7 @@ public class GameServer
                 Broadcast(fruit.ToFruitMovePacket());
             }  
         }
-        Thread.Sleep(1000 / TickRate);
+        Thread.Sleep(TickRate / 1000);
     }
 
    
