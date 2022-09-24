@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Net;
+using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
 using SFML.Graphics;
@@ -38,9 +39,12 @@ public class Game
     public bool IsInChat { get; set; }
     public List<DrawableFruit> Fruits { get; } = new();
     public List<Drawable> Drawables { get; } = new();
-    public Game()
+    public IPAddress Host { get; set; }
+
+    public Game(IPAddress host, int port)
     {
-        Client = new GameClient(this, "127.0.0.1", 7777);
+        Host = host;
+        Client = new GameClient(this, host.ToString(), 7777);
         Client.Connect();
         
 
