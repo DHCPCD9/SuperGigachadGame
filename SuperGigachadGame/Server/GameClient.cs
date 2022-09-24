@@ -199,6 +199,12 @@ public class GameClient
     private void Events_Connected(object? sender, ConnectionEventArgs e)
     {
         Console.WriteLine("Connected!");
+        var buffer = new MemoryStream();
+        var writter = new BinaryWriter(buffer);
+        
+        writter.Write((int)PacketType.RequrestData);
+        
+        Client.Send(buffer.ToArray());
     }
     
 

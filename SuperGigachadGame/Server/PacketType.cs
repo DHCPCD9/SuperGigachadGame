@@ -11,5 +11,6 @@ public enum PacketType : int
     FruitSpawn = 6,
     FruitMove = 7,
     ScoreUpdate = 8,
-    Chat = 9
+    Chat = 9,
+    RequrestData = 10,
 }

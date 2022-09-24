@@ -73,6 +73,56 @@ public class GameServer
         var reader = new BinaryReader(new MemoryStream(e.Data));
         var packetId = reader.ReadInt32();
 
+        if (packetId == (int)PacketType.RequrestData)
+        {
+            var rawPacket = new MemoryStream();
+            var binaryWritter = new BinaryWriter(rawPacket);
+
+            var client = new Client
+            {
+                ID = Clients.Count + 1,
+                X = 0,
+                Y = 0,
+                Username = "User " + Clients.Count + 1,
+                Tcp = e.IpPort
+            };
+        
+            client.SetRandomColor();
+
+            var rawPacketToSent = new MemoryStream();
+            var binaryWriterToSent = new BinaryWriter(rawPacketToSent);
+            binaryWriterToSent.Write((int)PacketType.PlayerJoined);
+            binaryWriterToSent.Write(client.ToBuffer());
+            Broadcast(rawPacketToSent.ToArray());
+        
+            foreach (var clientToSent in Clients)
+            {
+                if (clientToSent.Tcp == client.Tcp) continue;
+            
+                var rawPacketToSent2 = new MemoryStream();
+                var binaryWriterToSent2 = new BinaryWriter(rawPacketToSent2);
+                binaryWriterToSent2.Write((int)PacketType.PlayerJoined);
+                binaryWriterToSent2.Write(clientToSent.ToBuffer());
+            
+                Listener.Send(client.Tcp, rawPacketToSent2.ToArray());
+            }
+        
+            //Sending fruits stuff
+        
+            foreach (var fruit in Fruits)
+            {
+                Listener.Send(client.Tcp, fruit.ToFruitSpawnPacket());
+            }
+        
+            Clients.Add(client);
+            binaryWritter.Write((int)PacketType.PlayerData);
+            binaryWritter.Write(client.ToBuffer());
+            binaryWritter.Close();
+            rawPacket.Close();
+            Console.WriteLine("Client connected! (" + e.IpPort + ")" + " ID: " + client.ID);
+            Listener.Send(e.IpPort, rawPacket.ToArray());
+        }
+
         if (packetId == (int)PacketType.PlayerPosition)
         {
             var x = reader.ReadInt32();
@@ -158,52 +208,7 @@ public class GameServer
 
     private void Events_ClientConnected(object? sender, ConnectionEventArgs e)
     {
-        var rawPacket = new MemoryStream();
-        var binaryWritter = new BinaryWriter(rawPacket);
-
-        var client = new Client
-        {
-            ID = Clients.Count + 1,
-            X = 0,
-            Y = 0,
-            Username = "User " + Clients.Count + 1,
-            Tcp = e.IpPort
-        };
         
-        client.SetRandomColor();
-
-        var rawPacketToSent = new MemoryStream();
-        var binaryWriterToSent = new BinaryWriter(rawPacketToSent);
-        binaryWriterToSent.Write((int)PacketType.PlayerJoined);
-        binaryWriterToSent.Write(client.ToBuffer());
-        Broadcast(rawPacketToSent.ToArray());
-        
-        foreach (var clientToSent in Clients)
-        {
-            if (clientToSent.Tcp == client.Tcp) continue;
-            
-            var rawPacketToSent2 = new MemoryStream();
-            var binaryWriterToSent2 = new BinaryWriter(rawPacketToSent2);
-            binaryWriterToSent2.Write((int)PacketType.PlayerJoined);
-            binaryWriterToSent2.Write(clientToSent.ToBuffer());
-            
-            Listener.Send(client.Tcp, rawPacketToSent2.ToArray());
-        }
-        
-        //Sending fruits stuff
-        
-        foreach (var fruit in Fruits)
-        {
-            Listener.Send(client.Tcp, fruit.ToFruitSpawnPacket());
-        }
-        
-        Clients.Add(client);
-        binaryWritter.Write((int)PacketType.PlayerData);
-        binaryWritter.Write(client.ToBuffer());
-        binaryWritter.Close();
-        rawPacket.Close();
-        Console.WriteLine("Client connected! (" + e.IpPort + ")" + " ID: " + client.ID);
-        Listener.Send(e.IpPort, rawPacket.ToArray());
        
     }
 
