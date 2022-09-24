@@ -62,7 +62,7 @@ public class GameServer
 
     public void Broadcast(byte[] toArray)
     {
-        foreach (var client in Clients)
+        foreach (var client in Clients.ToList())
         {
             Listener.Send(client.Tcp, toArray);
         }
