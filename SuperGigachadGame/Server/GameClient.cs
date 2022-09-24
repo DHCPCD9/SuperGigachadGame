@@ -54,7 +54,7 @@ public class GameClient
         _game = game;
         Hostname = hostname;
         Port = port;
-        Client = new WatsonTcpClient("127.0.0.1", 7777);
+        Client = new WatsonTcpClient(Hostname, Port);
         Client.Events.ServerConnected += Events_Connected;
         Client.Events.ServerDisconnected += Events_Disconnected;
         Client.Events.MessageReceived += Events_DataReceived;

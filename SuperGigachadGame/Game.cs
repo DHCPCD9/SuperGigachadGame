@@ -40,7 +40,7 @@ public class Game
     public List<Drawable> Drawables { get; } = new();
     public Game()
     {
-        Client = new GameClient(this, "0.0.0.0", 7777);
+        Client = new GameClient(this, "127.0.0.1", 7777);
         Client.Connect();
         
 
